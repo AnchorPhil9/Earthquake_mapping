@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="UTF-8">
+    <title>Earthquakes</title>
+
+  <!-- Leaflet CSS & JS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+  integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+  crossorigin=""/>
+
+  <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+  integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+  crossorigin=""></script>
+
+
+    <!-- d3 JavaScript -->
+    <!--<script src="https://d3js.org/d3.v4.min.js"></script>-->
+    <!--Per 13.5.3 (2021), we'll need v5 of the d3 js file.-->
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+
+
+    <!-- Our CSS -->
+    <link rel="stylesheet" type="text/css" href="static/css/style.css">
+
+  </head>
+  <body>
+
+    <!-- map div -->
+    <!--Since our Challenge code map id is 'mapid', we must specify that id in the <div> tags.-->
+    <div id="mapid"></div>
+
+
+  
+    <!-- API key -->
+    <script type="text/javascript" src="static/js/config.js"></script>
+      <!-- JS  -->
+      <!--For our Challenge, the logic source code map id is challenge_logic.-->
+    <script type="text/javascript" src="static/js/challenge_logic.js"></script>
+
+  </body>
+</html>
