@@ -20,7 +20,7 @@ let satelliteStreets = L.tileLayer('https://api.mapbox.com/styles/v1/mapbox/sate
 var myMap = L.map('mapid', {
 	center: [40.7, -94.5],
 	zoom: 3,
-	layers: [streets, satelliteStreets]
+	layers: [streets]
 });
 
 // Create a base layer that holds all three maps.
@@ -33,22 +33,27 @@ let baseMaps = {
 let allEarthquakes = new L.LayerGroup();
 // Following 13.6.4 (2021), we'll make a new layer group called 'allTectonicPlates'.
 let allTectonicPlates = new L.LayerGroup();
+// For Deliverable 2 of the Module Challenge 13 (2021), we'll add a third layer group called
+// 'majorEarthQuakes'.
+let majorEarthQuakes = new L.LayerGroup();
 
 // 2. Add a reference to the tectonic plates group to the overlays object.
 let overlays = {
   "Earthquakes": allEarthquakes
 };
 // Like in 13.6.4 (2021), we'll make an overlay object called 'tectonics' to 
-// reference one of our layer groups, specifically allTectonicPlates
+// reference one of our layer groups, specifically allTectonicPlates.
 let tectonics = {
   "Tectonic Plates": allTectonicPlates
 };
+// We'll do the same for our 'majorEarthquakes' layer group, calling the
+// overlay object 'majors'
+let majors = {
+  "Major Earthquakes": majorEarthQuakes
+}
 
 // Then we add a control to the map that will allow the user to change which
 // layers are visible.
-// As with the 'overlays' reference, we'll add the 'tectonics' reference to the map.
-// Otherwise, we won't see the tectonic plates layer.
-//L.control.layers(baseMaps, overlays, tectonics).addTo(myMap);
 L.control.layers(baseMaps, overlays).addTo(myMap);
 
 // Retrieve the earthquake GeoJSON data.
@@ -106,8 +111,7 @@ d3.json("https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.geoj
       		return L.circleMarker(latlng);
         },
       // We set the style for each circleMarker using our styleInfo function.
-      // If we want style, we'll uncomment the next comment.
-    //style: styleInfo,
+    style: styleInfo,
      // We create a popup for each circleMarker to display the magnitude and location of the earthquake
      //  after the marker has been created and styled.
      onEachFeature: function(feature, layer) {
@@ -117,6 +121,21 @@ d3.json("https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.geoj
 
   // Then we add the earthquake layer to our map.
   allEarthquakes.addTo(myMap);
+
+// To retrieve JSON data of major earthquakes, we'll need d3.json(),
+// as mentioned in the Module 13 Challenge (2021) instructions.
+// For convenience, we'll store the major earthquakes URL in a variable.
+let mEQ = 'https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/4.5_week.geojson'
+// For our function, we'll use 'major' as our parameter.
+d3.json(mEQ).then(function(major) {
+  // To check our progress, we use console.log on our 'major' parameter.
+  console.log(major);
+  // Like we did in Deliverable 1, we'll add the 'major' data
+  // to our 'majorEarthquakes' layer group.
+  L.geoJson(major).addTo(majorEarthQuakes);
+  // Now, we'll add the layer group to the map
+  majorEarthQuakes.addTo(myMap)
+})
 
   // Here we create a legend control object.
 let legend = L.control({
@@ -157,8 +176,6 @@ legend.onAdd = function() {
   let tectPlateURL = "https://raw.githubusercontent.com/fraxen/tectonicplates/master/GeoJSON/PB2002_boundaries.json"
   // In our d3.json function, we will now make a new function, with a 'tecto' parameter, that uses 
   // Leaflet's geoJSON() function. For debugging, we'll include console.log inside the tecto function.
-  // Then 
-  //we end the L.geoJSON() function with the addto() function.
   d3.json(tectPlateURL).then(function(tecto) {
     console.log(tecto);
     // Per Module 13 Challenge instructions (2021), we'll add the tecto data 
