@@ -160,8 +160,10 @@ d3.json(mEQ).then(function(major) {
     if (magnitude < 5) {
       return "#ea822c";
     }
-    //// Magnitude 5+ Earthquakes will be a shade of bright red.
-    if (magnitude > 5) {
+    //// Earthquakes between Magnitudes 5 and 6 will be a shade of bright red.
+    //// We will need 2 conditions with the '&&' operator to make this happen.
+	//// Reference for '&&' operator: https://www.w3schools.com/js/js_operators.asp
+    if (magnitude > 5 && magnitude < 6) {
       return "#ea2c2c";
     }
     //// Magnitude 6+ Earthquakes will be a shade of dark red.
