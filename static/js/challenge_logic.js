@@ -15,6 +15,14 @@ let satelliteStreets = L.tileLayer('https://api.mapbox.com/styles/v1/mapbox/sate
 	accessToken: API_KEY
 });
 
+//// Deliverable 3: Per the Module 13 Challenge (2021), we'll add a third layer that
+//// will hold Mapbox's dark style. 
+let darkStreets = L.tileLayer('https://api.mapbox.com/styles/v1/mapbox/dark-v10/tiles/{z}/{x}/{y}?access_token={accessToken}', {
+	attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery (c) <a href="https://www.mapbox.com/">Mapbox</a>',
+	maxZoom: 18,
+	accessToken: API_KEY
+});
+
 // Create the map object with center, zoom level and default layer.
 //// Instead of 'let map', we'll use 'var myMap'.
 var myMap = L.map('mapid', {
@@ -24,9 +32,11 @@ var myMap = L.map('mapid', {
 });
 
 // Create a base layer that holds all three maps.
+//// Since we added a third layer, we'll add it to our baseMaps layer as 'Dark'.
 let baseMaps = {
   "Streets": streets,
-  "Satellite": satelliteStreets
+  "Satellite": satelliteStreets,
+  "Dark": darkStreets
 };
 
 // 1. Add a 2nd layer group for the tectonic plate data.
@@ -142,24 +152,25 @@ d3.json(mEQ).then(function(major) {
     };
   }
   //// Deliverable 2: Here, we'll refactor the getColor code. This time,
-  //// however, there will be 3 colors for 3 magnitudes: less than
-  //// magnitude 5, greater than magnitude 5, and greater than magnitude 6
+  //// however, there will be 3 colors for 3 magnitudes of serious Earthquakes: 
+  //// less than magnitude 5, greater than magnitude 5, and greater than magnitude 6
   //// ("Module 13 Challenge", 2021).
   function getColor(magnitude) {
-    //// Magnitude 5- Earthquakes will be light magenta.
-    if (magnitude <= 5) {
-      return "#ffbbff";
+    //// Magnitude 5- Earthquakes will be a shade of bright orange.
+    if (magnitude < 5) {
+      return "#ea822c";
     }
-    //// Magnitude 5+ Earthquakes will be normal magenta.
+    //// Magnitude 5+ Earthquakes will be a shade of bright red.
     if (magnitude > 5) {
-      return "#ff00ff";
+      return "#ea2c2c";
     }
-    //// Magnitude 6+ Earthquakes will be purple.
+    //// Magnitude 6+ Earthquakes will be a shade of dark red.
     if (magnitude > 6) {
-      return "#800080";
+      return "#b71212";
     }
-    //// The rest of the earthquakes will be
-    return "#ffffff";
+    //// Earthquakes with a Magnitude of exactly 5 will be bright orange,
+    //// the same color as Magnitude 5- Earthquakes.
+    return "#ea822c";
   }
 
   //// Deliverable 2: Then we'll refactor the getRadius code
@@ -201,15 +212,16 @@ let legend = L.control({
 // Then add all the details for the legend
 legend.onAdd = function() {
   let div = L.DomUtil.create("div", "info legend");
-
-  const magnitudes = [0, 1, 2, 3, 4, 5];
+  //// We'll add a color for magnitude 6.
+  const magnitudes = [0, 1, 2, 3, 4, 5, 6];
   const colors = [
     "#98ee00",
     "#d4ee00",
     "#eecc00",
     "#ee9c00",
     "#ea822c",
-    "#ea2c2c"
+    "#ea2c2c",
+    "#b71212"
   ];
 
 // Looping through our intervals to generate a label with a colored square for each interval.
